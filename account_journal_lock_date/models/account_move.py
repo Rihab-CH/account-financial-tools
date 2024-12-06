@@ -14,7 +14,9 @@ class AccountMove(models.Model):
 
     def write(self, values):
         res = super().write(values)
-        self._check_fiscalyear_lock_date()
+        # Skip _check_fiscalyear_lock_date if 'access_token' is the only key in values
+        if not (len(values) == 1 and 'access_token' in values):
+            self._check_fiscalyear_lock_date()
         return res
 
     def _check_fiscalyear_lock_date(self):
